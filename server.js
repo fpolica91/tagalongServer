@@ -3,14 +3,29 @@ const cors = require('cors')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+
+// redis configuration
+
+
+
+// end of redis configuration
+
+
 const routes = require('./routes/routes')
 const mongoose = require('mongoose');
-const socketManager = require('./socket.manager')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const User = require('./Models/User.model')
+const Event = require('./Models/Events.model')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors())
+app.use(express.json())
+require('dotenv').config()
+
+
+
 
 mongoose
     .connect('mongodb://localhost/TagAlong', { useNewUrlParser: true, useCreateIndex: true })
@@ -23,17 +38,43 @@ mongoose
 
 
 
-io.on('connection', socketManager)
+io.on('connection', socket => {
+    console.log('new conection established')
+    User.find({})
+        .then(users => {
+            console.log('this emit gets the users')
+            socket.emit('users', users)
+        })
+        .catch(err => res.json(err))
+
+    Event.find({})
+        .then(events => {
+            console.log('this emit gets all the events')
+            socket.emit('events', events)
+        })
+
+    app.post('/event', (req, res, next) => {
+        Event.create(req.body)
+            .then(event => res.json(event))
+            .catch(err => res.json(err))
+    })
 
 
-// app.use((req, res, next) => {
-//     req.io = io;
-//     req.connectedUsers = connectedUsers;
-//     return next();
-// });
 
-app.use(cors())
-app.use(express.json())
+
+
+    socket.on('disconnect', () => {
+        console.log(' a user disconnected')
+    })
+
+
+})
+
+
+
+
+
+
 app.use("/", routes)
 
-server.listen(5000)
+server.listen(process.env.PORT)

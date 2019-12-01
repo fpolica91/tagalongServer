@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router()
-const User = require('../Models/User.model')
+const controller = require('../controllers/user.contorller')
 
-router.post("/new", (req, res, next) => {
-    User.create(req.body)
-        .then(user => res.json(user))
-})
+// router.post('/new', controller.createUser)
 
+
+// router.post('/event', controller.newEvent)
 
 
 module.exports = router
