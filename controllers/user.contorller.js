@@ -1,5 +1,5 @@
 const User = require('../Models/User.model')
-const Event = require('../Models/Events.model')
+
 
 
 
@@ -9,5 +9,8 @@ module.exports = {
             .then(user => {
                 res.json(user)
             })
+    },
+    authenticateUser(req, res) {
+
     }
 }
