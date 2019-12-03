@@ -1,8 +1,16 @@
-const express = require('express')
+
+var sticky = require('sticky-session'),
+    http = require('http'),
+    express = require('express'),
+    socketIO = require('socket.io'),
+    cluster = require('cluster'),
+    // port = process.env.PORT || 3000;
+    cpus = require('os').cpus().length
+port = 5000
+
+var app = express(), io;
+server = http.Server(app);
 const cors = require('cors')
-const app = express()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -17,6 +25,11 @@ require('dotenv').config()
 require('./config/db/db.setup')
 
 
+
+
+
+
+io = socketIO(server);
 
 
 io.on('connection', socket => {
@@ -56,9 +69,22 @@ io.on('connection', socket => {
 
 
 
+if (!sticky.listen(server, port)) {
+    server.once('listening', function () {
+        console.log('Server started on port ' + port);
+    });
+
+    if (cluster.isMaster) {
+        for (let i = 0; i < cpus.length; i++) {
+            cluster.fork()
+        }
+        console.log('Master server started on port ' + port);
+    }
+}
+else {
+
+    console.log('- Child server started on port ' + port + ' case worker id=' + cluster.worker.id);
+}
 
 
 
-app.use("/", routes)
-
-server.listen(process.env.PORT)

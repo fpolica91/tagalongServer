@@ -2,7 +2,7 @@
   "name": "tag_along",
   "version": "1.0.0",
   "description": "tag along server, not using express generator",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js"
   },
@@ -24,9 +24,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.7.12",
     "morgan": "^1.9.0",
-    "redis": "^2.8.0",
     "socket.io": "^2.3.0",
-    "socket.io-redis": "^5.2.0"
+    "sticky-session": "^1.1.2"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
