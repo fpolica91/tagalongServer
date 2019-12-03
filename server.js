@@ -4,9 +4,9 @@ var sticky = require('sticky-session'),
     express = require('express'),
     socketIO = require('socket.io'),
     cluster = require('cluster'),
-    // port = process.env.PORT || 3000;
+
     cpus = require('os').cpus().length
-port = 5000
+
 
 var app = express(), io;
 server = http.Server(app);
@@ -21,8 +21,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors())
 app.use(express.json())
+app.use(routes)
 require('dotenv').config()
 require('./config/db/db.setup')
+const port = 5000
 
 
 
@@ -79,10 +81,16 @@ if (!sticky.listen(server, port)) {
             cluster.fork()
         }
         console.log('Master server started on port ' + port);
+        // exit cluster
+        // cluster.on('exit', (worker, code, signal) => {
+        //     console.log(`woker ${woker.process.pid} died`)
+        // })
     }
 }
 else {
-
+    // cluster.on('fork', (worker) => {
+    //     console.log(`worker is dead  work`, worker.isDead())
+    // })
     console.log('- Child server started on port ' + port + ' case worker id=' + cluster.worker.id);
 }
 
