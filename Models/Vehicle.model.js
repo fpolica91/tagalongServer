@@ -13,9 +13,9 @@ const vehicleSchema = new Schema({
     //PEOPLE ACCEPTED BY OWNER
     tagAlongs: {
         type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-        maxlength: seats
+
     }
 })
 
 
-module.exports = mongoose.Model(vehicleSchema, "Vehicle")
+module.exports = mongoose.model("Vehicle", vehicleSchema)

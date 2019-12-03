@@ -2,8 +2,7 @@ const User = require('../Models/User.model')
 const Event = require('../Models/Events.model')
 const bcrypt = require('bcryptjs')
 
-
-
+      
 module.exports = {
     createUser(req, res) {
         //console.log(req.body)
@@ -35,7 +34,16 @@ module.exports = {
         //     .then(user => {
         //         res.json(user)
         //     })
-    }
+=======
+//         User.create(req.body)
+//             .then(user => {
+//                 res.json(user)
+//             })
+//     },
+//     authenticateUser(req, res) {
+
+
+//     }
 
 
 }

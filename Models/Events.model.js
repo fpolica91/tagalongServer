@@ -16,7 +16,7 @@ const eventSchema = new Schema({
         type: Boolean,
     },
     attending: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    requested: [{ type: Schema.Types.ObjectId, ref: "User" }]
+    requested: [{ type: Schema.Types.ObjectId, ref: "User" }],
 })
 
 module.exports = mongoose.model("Event", eventSchema)
