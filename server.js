@@ -4,7 +4,6 @@ var sticky = require('sticky-session'),
     express = require('express'),
     socketIO = require('socket.io'),
     cluster = require('cluster'),
-
     cpus = require('os').cpus().length
 
 
@@ -14,6 +13,7 @@ const cors = require('cors')
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+
 const User = require('./Models/User.model')
 const Event = require('./Models/Events.model')
 app.use(bodyParser.json());
@@ -22,6 +22,14 @@ app.use(cookieParser());
 app.use(cors())
 app.use(express.json())
 app.use(routes)
+
+require('./config/passport.setup')(app)
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true
+}));
+
 require('dotenv').config()
 require('./config/db/db.setup')
 const port = 5000
@@ -31,19 +39,11 @@ const port = 5000
 
 
 
-mongoose
-    .connect('mongodb://localhost/TagAlong', { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true })
-    .then(x => {
-        console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
-    })
-    .catch(err => {
-        console.error('Error connecting to mongo', err)
-    });
+
+
 
 
 io = socketIO(server);
-
-
 io.on('connection', socket => {
     console.log('new conection established')
     socket.on('init_communication', () => {
@@ -91,16 +91,10 @@ if (!sticky.listen(server, port)) {
             cluster.fork()
         }
         console.log('Master server started on port ' + port);
-        // exit cluster
-        // cluster.on('exit', (worker, code, signal) => {
-        //     console.log(`woker ${woker.process.pid} died`)
-        // })
+
     }
 }
 else {
-    // cluster.on('fork', (worker) => {
-    //     console.log(`worker is dead  work`, worker.isDead())
-    // })
     console.log('- Child server started on port ' + port + ' case worker id=' + cluster.worker.id);
 }
 
