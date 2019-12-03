@@ -31,6 +31,16 @@ const port = 5000
 
 
 
+mongoose
+    .connect('mongodb://localhost/TagAlong', { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true })
+    .then(x => {
+        console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+    })
+    .catch(err => {
+        console.error('Error connecting to mongo', err)
+    });
+
+
 io = socketIO(server);
 
 
