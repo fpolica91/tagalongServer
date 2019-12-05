@@ -28,22 +28,6 @@ module.exports = {
                 }).catch(err => console.log(err))
         }
     },
-    // USER AUTHENTICATE GOES HERE
-    // authenticate(req, res) {
-    //     passport.authenticate('local', function (err, user, info) {
-    //         if (err || (!user)) {
-    //             res.status(500).json({ message: "unexpected error ", err })
-    //             return
-    //         }
-    //         req.login(user, (err) => {
-    //             if (err) {
-    //                 res.status(500).jason({ message: "error authenticating" })
-    //                 return
-    //             }
-    //             res.status(200).json({ user })
-    //         })
-    //     })(req, res)
-    // }
 }
 
 

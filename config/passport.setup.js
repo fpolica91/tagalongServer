@@ -1,5 +1,6 @@
-const passport = require('passport')
-require('./serializer')
+const passport = require('passport');
+
+require('./serializers')
 require('./local.strategy')
 
 module.exports = (app) => {
