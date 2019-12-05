@@ -1,3 +1,4 @@
+require('dotenv').config()
 
 var sticky = require('sticky-session'),
     http = require('http'),
@@ -6,6 +7,10 @@ var sticky = require('sticky-session'),
     cluster = require('cluster'),
     cpus = require('os').cpus().length
 
+// PASSPORT CONFIG
+// const passport = require('passport')    
+// require('./config/passport-config')(passport)
+require('./config/db/db.setup')
 
 var app = express(), io;
 server = http.Server(app);
@@ -19,19 +24,26 @@ const Event = require('./Models/Events.model')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors())
 app.use(express.json())
-app.use(routes)
 
-require('./config/passport.setup')(app)
+
+
 app.use(require('express-session')({
     secret: 'keyboard cat',
     resave: true,
     saveUninitialized: true
 }));
 
-require('dotenv').config()
-require('./config/db/db.setup')
+// // PASSPORT MIDDLEWARE
+require('./config/passport.setup.js')(app)
+// require('./config/passport.setup')(app)
+// require('./config/serializer')
+app.use(cors())
+app.use(routes)
+ 
+// app.use(passport.initialize())
+// app.use(passport.session())
+
 const port = 5000
 
 
