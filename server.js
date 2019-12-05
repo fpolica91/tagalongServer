@@ -7,9 +7,7 @@ var sticky = require('sticky-session'),
     cluster = require('cluster'),
     cpus = require('os').cpus().length
 
-// PASSPORT CONFIG
-// const passport = require('passport')    
-// require('./config/passport-config')(passport)
+
 require('./config/db/db.setup')
 
 var app = express(), io;
@@ -34,15 +32,18 @@ app.use(require('express-session')({
     saveUninitialized: true
 }));
 
-// // PASSPORT MIDDLEWARE
-require('./config/passport.setup.js')(app)
-// require('./config/passport.setup')(app)
-// require('./config/serializer')
+// PASSPORT CONFIG (VERSION 2)
+const passport = require('passport')    
+require('./config/passport-config')(passport)
+app.use(passport.initialize());
+app.use(passport.session());
+
+// // PASSPORT MIDDLEWARE (IRONHACK BOILERPLATE)
+// require('./config/passport.setup.js')(app)
+
 app.use(cors())
 app.use(routes)
  
-// app.use(passport.initialize())
-// app.use(passport.session())
 
 const port = 5000
 
