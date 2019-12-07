@@ -33,15 +33,20 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// PASSPORT CONFIG (VERSION 2)
-const passport = require('passport')    
+// ====================PASSPORT MIDDLEWARE==========================
+// PASSPORT CONFIG (VERSION 1)
 require('./config/passport.setup.js')(app)
-// require('./config/passport-config')(passport)
-// app.use(passport.initialize());
-// app.use(passport.session());
+
 
 // // PASSPORT MIDDLEWARE (IRONHACK BOILERPLATE)
 // require('./config/passport.setup.js')(app)
+
+// PASSPORT MIDDLEWARE VERSION 2
+// const passport = require('passport')    
+// require('./config/passport-config')(passport)
+// app.use(passport.initialize());
+// app.use(passport.session());
+// ====================PASSPORT MIDDLEWARE==========================
 
 app.use(cors({
   credentials: true,
