@@ -6,13 +6,14 @@ const passport = require('passport')
 module.exports = {
     createUser(req, res) {
         const { username, password, email } = req.body
+        console.log('this is req.body', req.body)
         if (username === "" || password === "" || email === "") {
-            res.status(401).json({ message: "Please fill all the required fields" })
+            res.json({ message: "Please fill all the required fields" })
         } else {
             User.find({ username })
                 .then(users => {
                     if (users.length > 0) {
-                        res.status(401).json({ message: "Username already exists" })
+                        res.json({ message: "Username already exists" })
                     } else {
 
                         const bcryptsalt = 10;
@@ -27,10 +28,26 @@ module.exports = {
                     }
                 }).catch(err => console.log(err))
         }
-    },
+    }
 }
+    // USER AUTHENTICATE GOES HERE
+//     authenticate(req, res, next) {
+//        console.log(req.body)
+// }
 
-
+       // passport.authenticate('local', function (err, user, info) {
+        //     if (err || (!user)) {
+        //         res.status(500).json({ message: "unexpected error ", err })
+        //         return
+        //     }
+        //     req.login(user, (err) => {
+        //         if (err) {
+        //             res.status(500).jason({ message: "error authenticating" })
+        //             return
+        //         }
+        //         res.status(200).json({ user })
+        //     })
+        // })(req, res)
 
 
 
