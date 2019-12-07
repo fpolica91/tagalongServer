@@ -22,7 +22,19 @@ module.exports = (passport) => {
         })
         .catch(err => done(err))
     }) 
+
     )
+    passport.serializeUser((user, done) => { 
+    console.log("SUCCESSFULLY LOGGED IN!")
+   return done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+    console.log("DESERIALIZE!")
+    User.findById(id, (err, user) => {
+       return done(err, user)
+    })
+ } )
 }
 
 // passport.serializeUser((user, done) => { 

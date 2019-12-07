@@ -7,9 +7,7 @@ var sticky = require('sticky-session'),
     cluster = require('cluster'),
     cpus = require('os').cpus().length
 
-// PASSPORT CONFIG
-// const passport = require('passport')    
-// require('./config/passport-config')(passport)
+
 require('./config/db/db.setup')
 
 require('./config/db/db.setup')
@@ -19,32 +17,54 @@ const cors = require('cors')
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+<<<<<<< HEAD
 const passport = require('passport')
+=======
+const session = require('express-session')
+>>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
 
 const User = require('./Models/User.model')
 const Event = require('./Models/Events.model')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser(''));
 app.use(express.json())
 
 
 
-app.use(require('express-session')({
+app.use(session({
     secret: 'keyboard cat',
     resave: true,
     saveUninitialized: true
 }));
 
-// // PASSPORT MIDDLEWARE
+// ====================PASSPORT MIDDLEWARE==========================
+// PASSPORT CONFIG (VERSION 1)
 require('./config/passport.setup.js')(app)
-// require('./config/passport.setup')(app)
-// require('./config/serializer')
-app.use(cors())
+
+
+// // PASSPORT MIDDLEWARE (IRONHACK BOILERPLATE)
+// require('./config/passport.setup.js')(app)
+
+// PASSPORT MIDDLEWARE VERSION 2
+// const passport = require('passport')    
+// require('./config/passport-config')(passport)
+// app.use(passport.initialize());
+// app.use(passport.session());
+// ====================PASSPORT MIDDLEWARE==========================
+
+app.use(cors({
+  credentials: true,
+  origin: [process.env.REACT_APP]
+}))
 app.use(routes)
+<<<<<<< HEAD
 
 // app.use(passport.initialize())
 // app.use(passport.session())
+=======
+ 
+>>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
 
 const port = 5000
 
