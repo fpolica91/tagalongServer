@@ -5,6 +5,7 @@ const passport = require('passport')
 
 module.exports = {
     createUser(req, res) {
+        console.log(req.body)
         const { username, password, email } = req.body
         if (username === "" || password === "" || email === "") {
             res.status(401).json({ message: "Please fill all the required fields" })
@@ -12,7 +13,8 @@ module.exports = {
             User.find({ username })
                 .then(users => {
                     if (users.length > 0) {
-                        res.status(401).json({ message: "Username already exists" })
+                        console.log("USER FOUND!")
+                        res.json({ message: "Username already exists" })
                     } else {
 
                         const bcryptsalt = 10;
@@ -21,7 +23,7 @@ module.exports = {
 
                         User.create({ username, password: encryptedPassword, email })
                             .then(user => {
-                                // console.log(user)
+                                console.log("NEW USER!")
                                 res.json(user)
                             }).catch(err => console.log("An error just happened while signing up ", err))
                     }

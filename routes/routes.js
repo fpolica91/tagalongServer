@@ -21,7 +21,6 @@ router.post('/login', (req, res, next) => {
         res.status(401).json(info)
     }
 
-    console.log("login")
     req.login(user, (err) => {
         console.log("LOGIN CALLED")
                 if (err) {
@@ -31,6 +30,11 @@ router.post('/login', (req, res, next) => {
                 res.status(200).json({ user })
             })
     })(req, res, next);
+})
+
+router.get('/loggedin', (req, res, next) => {
+    console.log("USER LOGGED IN")
+    console.log(req.user)
 })
 
 

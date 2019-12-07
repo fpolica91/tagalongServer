@@ -2,11 +2,16 @@ const passport = require('passport')
 const User = require('../Models/User.model')
 
 passport.serializeUser((loggedInUser, done) => {
-    done(null, loggedInUser._id)
+    console.log("THIS IS SERIALIZER")
+    console.log(loggedInUser._id)
+     done(null, loggedInUser._id)
 });
 
 passport.deserializeUser((userIdFromSession, done) => {
+    console.log("THIS IS DESERIALIZER")
     User.findById(userIdFromSession)
-        .then(fullUserDoc => done(null, fullUserDoc))
+        .then(fullUserDoc => {
+            console.log(fullUserDoc)
+            done(null, fullUserDoc)})
         .catch(err => done(err));
 })
