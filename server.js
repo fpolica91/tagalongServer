@@ -34,6 +34,11 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use((req, res, next) => {
+    req.io = io;
+    return next()
+})
+
 // ====================PASSPORT MIDDLEWARE==========================
 // PASSPORT CONFIG (VERSION 1)
 require('./config/passport.setup.js')(app)
@@ -49,10 +54,11 @@ require('./config/passport.setup.js')(app)
 // app.use(passport.session());
 // ====================PASSPORT MIDDLEWARE==========================
 
-app.use(cors({
-    credentials: true,
-    origin: [process.env.REACT_APP]
-}))
+// app.use(cors({
+//     credentials: true,
+//     origin: [process.env.REACT_APP]
+// }))
+app.use(cors())
 app.use(routes)
 
 

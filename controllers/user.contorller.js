@@ -3,8 +3,10 @@ const bcrypt = require('bcryptjs')
 const passport = require('passport')
 
 
+
 module.exports = {
     createUser(req, res) {
+
         console.log(req.body)
         const { username, password, email } = req.body
         console.log('this is req.body', req.body)
@@ -26,6 +28,7 @@ module.exports = {
                             .then(user => {
                                 console.log("NEW USER!")
                                 res.json(user)
+                                req.io.emit('reload')
                             }).catch(err => console.log("An error just happened while signing up ", err))
                     }
                 }).catch(err => console.log(err))

@@ -35,6 +35,9 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 })
 
+
+
+
 router.get('/loggedin', (req, res, next) => {
     console.log("USER LOGGED IN")
     console.log(req.user)
