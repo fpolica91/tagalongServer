@@ -17,11 +17,7 @@ const cors = require('cors')
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-<<<<<<< HEAD
-const passport = require('passport')
-=======
 const session = require('express-session')
->>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
 
 const User = require('./Models/User.model')
 const Event = require('./Models/Events.model')
@@ -54,17 +50,11 @@ require('./config/passport.setup.js')(app)
 // ====================PASSPORT MIDDLEWARE==========================
 
 app.use(cors({
-  credentials: true,
-  origin: [process.env.REACT_APP]
+    credentials: true,
+    origin: [process.env.REACT_APP]
 }))
 app.use(routes)
-<<<<<<< HEAD
 
-// app.use(passport.initialize())
-// app.use(passport.session())
-=======
- 
->>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
 
 const port = 5000
 
@@ -106,17 +96,11 @@ io.on('connection', socket => {
                 })
                 .catch(err => res.json(err))
         })
-
-
-
         // END OF INIT_COMMUNICATION
     })
     socket.on('disconnect', () => {
         console.log(' a user disconnected')
     })
-
-
-
 })
 
 

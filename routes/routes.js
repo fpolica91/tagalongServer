@@ -17,32 +17,17 @@ router.post('/login', (req, res, next) => {
         console.log("USER FOUND")
         console.log(user)
         if (err) {
-<<<<<<< HEAD
             res.status(500).json({ message: "unexpected error ", err })
         } if (!user) {
             res.status(401).json(info)
         }
 
-        console.log("login")
         req.login(user, (err) => {
             console.log("LOGIN CALLED")
             if (err) {
                 res.status(500).jason({ message: "error authenticating" })
                 return
             } else {
-=======
-        res.status(500).json({ message: "unexpected error ", err })
-    }if(!user){
-        res.status(401).json(info)
-    }
-
-    req.login(user, (err) => {
-        console.log("LOGIN CALLED")
-                if (err) {
-                    res.status(500).jason({ message: "error authenticating" })
-                    return
-                }
->>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
                 res.status(200).json({ user })
             }
 
@@ -57,7 +42,7 @@ router.get('/loggedin', (req, res, next) => {
 
 router.delete('/logout', (req, res, next) => {
     req.logout();
-    res.json({user: null})
+    res.json({ user: null })
 })
 
 
