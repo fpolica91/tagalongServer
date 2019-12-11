@@ -2,19 +2,21 @@
 const passport = require('passport');
 const User = require('../Models/User.model')
 
-passport.serializeUser((loggedInUser, done) => {
-    console.log("THIS IS SERIALIZER")
-    console.log(loggedInUser._id)
-    done(null, loggedInUser._id)
+passport.serializeUser((user, done) => {
+    // done(null, { _id: user._id })
+    done(null, user)
 });
 
 
-passport.deserializeUser((userIdFromSession, done) => {
+passport.deserializeUser((id, done) => {
     console.log("THIS IS DESERIALIZER")
-    User.findById(userIdFromSession)
-        .then(fullUserDoc => {
-            console.log(fullUserDoc)
-            done(null, fullUserDoc)
+    User.findById(id)
+        .then(user => {
+            done(null, user)
         })
-        .catch(err => done(err));
+    // User.findOne({ _id: id }, (err, user) => {
+    //     done(err, user)
+    // })
 })
+
+// PASSPORT IS NOT PROMISED BASED!

@@ -6,7 +6,6 @@ const passport = require('passport')
 
 module.exports = {
     createUser(req, res) {
-
         console.log(req.body)
         const { username, password, email } = req.body
         console.log('this is req.body', req.body)

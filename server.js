@@ -7,41 +7,50 @@ var sticky = require('sticky-session'),
     cluster = require('cluster'),
     cpus = require('os').cpus().length
 
-
-require('./config/db/db.setup')
-
 require('./config/db/db.setup')
 var app = express(), io;
 server = http.Server(app);
 const cors = require('cors')
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
+const logger = require('morgan')
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
 
 const User = require('./Models/User.model')
 const Event = require('./Models/Events.model')
+app.use(logger('dev'))
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(''));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.json())
+
+
+
 
 
 
 app.use(session({
     secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true
+    saveUninitialized: false,
+    resave: false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection,
+        ttl: 5000
+    })
 }));
 
-app.use((req, res, next) => {
-    req.io = io;
-    return next()
-})
 
-// ====================PASSPORT MIDDLEWARE==========================
+
+// // ====================PASSPORT MIDDLEWARE==========================
 // PASSPORT CONFIG (VERSION 1)
+// app.use(session({ secret: "anything" }))
 require('./config/passport.setup.js')(app)
+
+
+
 
 
 // // PASSPORT MIDDLEWARE (IRONHACK BOILERPLATE)
@@ -54,11 +63,11 @@ require('./config/passport.setup.js')(app)
 // app.use(passport.session());
 // ====================PASSPORT MIDDLEWARE==========================
 
-// app.use(cors({
-//     credentials: true,
-//     origin: [process.env.REACT_APP]
-// }))
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: ["http://localhost:3000"]
+}))
+// app.use(cors())
 app.use(routes)
 
 
@@ -77,6 +86,7 @@ const port = 5000
 
 io = socketIO(server);
 io.on('connection', socket => {
+
     console.log('new conection established')
     socket.on('init_communication', () => {
         console.log('this is the initial communication')
@@ -94,6 +104,7 @@ io.on('connection', socket => {
             })
 
         app.post('/event', (req, res, _) => {
+
             Event.create(req.body)
                 .then(event => {
                     console.log('this is the new event', event)
@@ -127,6 +138,12 @@ if (!sticky.listen(server, port)) {
 else {
     console.log('- Child server started on port ' + port + ' case worker id=' + cluster.worker.id);
 }
+
+
+app.use((req, res, next) => {
+    req.io = io;
+    return next()
+})
 
 
 
