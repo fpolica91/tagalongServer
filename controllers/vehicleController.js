@@ -11,7 +11,6 @@ module.exports = {
                     if (!user) {
                         res.json({ message: "cannot find user please log in" })
                     }
-
                     Vehicle.create({
                         owner: user._id,
                         model: model,

@@ -97,7 +97,16 @@ io.on('connection', socket => {
             })
             .catch(err => res.json(err))
 
-        Event.find({})
+        Event.find()
+            // THIS POPULATES THE HOST AND THE VEHICLE
+            .populate({
+                path: "host",
+                model: "User",
+                populate: {
+                    path: 'vehicles',
+                    model: "Vehicle"
+                }
+            })
             .then(events => {
                 console.log('this emit gets all the events')
                 socket.emit('events', events)
