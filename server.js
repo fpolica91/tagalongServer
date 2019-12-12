@@ -104,10 +104,9 @@ io.on('connection', socket => {
             })
 
         app.post('/event', (req, res, _) => {
-
+            console.log(req.body)
             Event.create(req.body)
                 .then(event => {
-                    console.log('this is the new event', event)
                     res.json(event)
                     io.sockets.emit('reload')
                 })

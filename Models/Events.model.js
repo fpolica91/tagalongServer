@@ -9,12 +9,13 @@ const eventSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ["Outdoors", "Food/Wine", "Music", "This Weekend", "Charity", "Night"],
+        enum: ["Outdoors", "Food", "Music", "thisWeekend", "Charity", "Night"],
 
     },
     public: {
         type: Boolean,
     },
+
     attending: [{ type: Schema.Types.ObjectId, ref: "User" }],
     requested: [{ type: Schema.Types.ObjectId, ref: "User" }],
 })
