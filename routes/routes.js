@@ -37,8 +37,12 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/loggedin', (req, res, next) => {
-    console.log("USER LOGGED IN")
-    console.log(req.user)
+    console.log(req.user, "is the logged user")
+    if(req.user){
+        res.json(req.user)
+    }else{
+        res.json(null)
+    }
 })
 
 router.delete('/logout', (req, res, next) => {

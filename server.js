@@ -7,9 +7,6 @@ var sticky = require('sticky-session'),
     cluster = require('cluster'),
     cpus = require('os').cpus().length
 
-
-require('./config/db/db.setup')
-
 require('./config/db/db.setup')
 var app = express(), io;
 server = http.Server(app);
@@ -17,17 +14,13 @@ const cors = require('cors')
 const routes = require('./routes/routes')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-<<<<<<< HEAD
-const passport = require('passport')
-=======
 const session = require('express-session')
->>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
 
 const User = require('./Models/User.model')
 const Event = require('./Models/Events.model')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(''));
+app.use(cookieParser());
 app.use(express.json())
 
 
@@ -55,16 +48,10 @@ require('./config/passport.setup.js')(app)
 
 app.use(cors({
   credentials: true,
-  origin: [process.env.REACT_APP]
+  origin: ['http://localhost:3000']
 }))
 app.use(routes)
-<<<<<<< HEAD
-
-// app.use(passport.initialize())
-// app.use(passport.session())
-=======
  
->>>>>>> 6bf5443153e2f35a133b057b4bd5774150575f04
 
 const port = 5000
 
