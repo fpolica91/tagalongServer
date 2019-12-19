@@ -6,7 +6,7 @@ const eventSchema = new Schema({
 
     date: {
         type: Date,
-        required: true
+        // required: true
     },
     name: {
         type: String,
@@ -18,15 +18,22 @@ const eventSchema = new Schema({
     public: {
         type: Boolean,
     },
-    vehicles: [holaVehicle = {type: Schema.Types.ObjectId, ref: "Vehicle"}],
-
-
-    attending: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    requested: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    vehicles: [{
+        car: { type: Schema.Types.ObjectId, ref: "Vehicle" },
+        seats: Number
+    }],
+    attending: [{
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        guest: Number
+    }],
+    requested: [{
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        guest: Number
+    }],
 },
-{
-    timestamps: true
-})
+    {
+        timestamps: true
+    })
 
 module.exports = mongoose.model("Event", eventSchema)
 
