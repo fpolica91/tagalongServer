@@ -1,4 +1,5 @@
 const User = require('../Models/User.model')
+const Vehicle = require('../Models/Vehicle.model')
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 
@@ -39,6 +40,26 @@ module.exports = {
         console.log(req.params.id)
         console.log("HELL YEAH")
 
+    },
+
+    createCar(req, res){
+        console.log(req.body)
+        const { userId, model, seats } = req.body
+        Vehicle.create({
+            model,
+            owner: userId,
+            seats
+        }).then(newCar => {
+            console.log(newCar._id)
+            User.findByIdAndUpdate(userId, 
+                { $push: {vehicles: newCar._id}},
+                { new : true, upsert: true},
+                ).then(userUpdated => {
+                    console.log("SUCCESS!")
+                    console.log(userUpdated)
+                })
+       
+        }).catch(err => console.error(err))
     }
 }
     // USER AUTHENTICATE GOES HERE

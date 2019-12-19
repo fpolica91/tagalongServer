@@ -25,6 +25,8 @@ const userSchema = new Schema({
     trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
     tagRequested: [{ type: Schema.Types.ObjectId, ref: "Event" }]
 
+},{
+    timestamps: true
 })
 
 

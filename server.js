@@ -85,23 +85,16 @@ io.on('connection', socket => {
     console.log('new conection established')
     socket.on('init_communication', () => {
         console.log('this is the initial communication')
-        User.find({})
+        User.find({}).select('username')
             .then(users => {
                 console.log('this emit gets the users')
                 io.sockets.emit('users', users)
             })
             .catch(err => res.json(err))
 
-        Event.find()
+        Event.find().populate('host', 'username email').populate('vehicles')
             // THIS POPULATES THE HOST AND THE VEHICLE
-            .populate({
-                path: "host",
-                model: "User",
-                populate: {
-                    path: 'vehicles',
-                    model: "Vehicle"
-                }
-            })
+         
             .then(events => {
                 console.log('this emit gets all the events')
                 socket.emit('events', events)
@@ -149,6 +142,16 @@ app.use((req, res, next) => {
 })
 
 
+
+//OLD WAY POPULATING MONGOOSE
+// .populate({
+     // path: "host",
+     // model: "User",
+     // populate: {
+     //     path: 'vehicles',
+     //     model: "Vehicle"
+     // }
+// })
 
 
 

@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs')
 router.put('/user/:id', vehicleController.addVehicle)
 router.post('/newUser', controller.createUser)
 router.put('/tagrequest/:id', controller.tagRequest)
+router.post('/newCar', controller.createCar)
 // router.post('/login', controller.authenticate)
 
 
@@ -24,6 +25,7 @@ router.post('/login', (req, res, next) => {
         req.login(user, (err) => {
             console.log("LOGIN CALLED")
             console.log('found the user', user)
+            user.password = undefined
             if (err) {
                 res.json({ message: "error authenticating" })
                 return
@@ -39,6 +41,7 @@ router.post('/login', (req, res, next) => {
 router.get('/loggedin', (req, res, next) => {
     console.log(req.user, "is the user")
     if (req.user) {
+        req.user.password = undefined
         res.json(req.user)
     } else {
         res.json(null)
