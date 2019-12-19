@@ -65,7 +65,7 @@ require('./config/passport.setup.js')(app)
 
 app.use(cors({
     credentials: true,
-    origin: ["http://localhost:3000"]
+    origin: ["http://localhost:3000", "http://localhost:8081"]
 }))
 // app.use(cors())
 app.use(routes)
@@ -112,14 +112,30 @@ io.on('connection', socket => {
                 socket.emit('events', events)
             })
 
+
         app.post('/event', (req, res, _) => {
-            console.log(req.body)
-            Event.create(req.body)
-                .then(event => {
-                    res.json(event)
-                    io.sockets.emit('reload')
+            User.findById(req.body.host)
+                .then(user => {
+                    Event.create({
+                        host: user._id,
+                        date: req.body.date,
+                        name: req.body.name,
+                        category: req.body.category,
+                        public: req.body.public
+                    }).then(event => {
+                        user.events.push(event._id)
+                        user.save()
+                        res.json(event)
+                        io.sockets.emit('reload')
+                    })
                 })
-                .catch(err => res.json(err))
+            //     console.log(req.body)
+            //     Event.create(req.body)
+            //         .then(event => {
+            //             res.json(event)
+            //             io.sockets.emit('reload')
+            //         })
+            //         .catch(err => res.json(err))
         })
         // END OF INIT_COMMUNICATION
     })

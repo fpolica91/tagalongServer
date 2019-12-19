@@ -12,6 +12,7 @@ router.post('/newUser', controller.createUser)
 
 
 router.post('/login', (req, res, next) => {
+    console.log(req.body, "user trying to log in")
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             res.json({ message: "unexpected error ", err })
