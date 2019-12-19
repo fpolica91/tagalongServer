@@ -22,8 +22,11 @@ const userSchema = new Schema({
     },
     vehicles: [{ type: Schema.Types.ObjectId, ref: "Vehicle" }],
     events: [{ type: Schema.Types.ObjectId, ref: "Event" }],
-    trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }]
+    trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
+    tagRequested: [{ type: Schema.Types.ObjectId, ref: "Event" }]
 
+},{
+    timestamps: true
 })
 
 
