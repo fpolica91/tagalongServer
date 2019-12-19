@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const passport = require('passport')
 
 
+
 module.exports = {
     createUser(req, res) {
         console.log(req.body)
@@ -26,10 +27,18 @@ module.exports = {
                             .then(user => {
                                 console.log("NEW USER!")
                                 res.json(user)
+                                req.io.emit('reload')
                             }).catch(err => console.log("An error just happened while signing up ", err))
                     }
                 }).catch(err => console.log(err))
         }
+    },
+
+
+    tagRequest(req, res){
+        console.log(req.params.id)
+        console.log("HELL YEAH")
+
     }
 }
     // USER AUTHENTICATE GOES HERE

@@ -5,49 +5,51 @@ const vehicleController = require('../controllers/vehicleController')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
-
-router.post('/new', controller.createUser)
 router.put('/user/:id', vehicleController.addVehicle)
 router.post('/newUser', controller.createUser)
+router.put('/tagrequest/:id', controller.tagRequest)
 // router.post('/login', controller.authenticate)
 
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-        console.log("USER FOUND")
-        console.log(user)
         if (err) {
-            res.status(500).json({ message: "unexpected error ", err })
+            res.json({ message: "unexpected error ", err })
+
         } if (!user) {
             res.status(401).json(info)
+
         }
 
-        console.log("login")
         req.login(user, (err) => {
             console.log("LOGIN CALLED")
+            console.log('found the user', user)
             if (err) {
-                res.status(500).jason({ message: "error authenticating" })
+                res.json({ message: "error authenticating" })
                 return
-            } else {
-                res.status(200).json({ user })
             }
-
+            res.json({ user })
         })
     })(req, res, next);
 })
 
+
+
+
 router.get('/loggedin', (req, res, next) => {
-    console.log(req.user, "is the logged user")
-    if(req.user){
+    console.log(req.user, "is the user")
+    if (req.user) {
         res.json(req.user)
-    }else{
+    } else {
         res.json(null)
     }
+
+
 })
 
 router.delete('/logout', (req, res, next) => {
     req.logout();
-    res.json({user: null})
+    res.json({ user: null })
 })
 
 
