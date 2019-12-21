@@ -4,12 +4,28 @@ const controller = require('../controllers/user.contorller')
 const vehicleController = require('../controllers/vehicleController')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
+const ticketmaster = require('../controllers/event.ticketmster')
+const axios = require('axios')
 
 router.put('/user/:id', vehicleController.addVehicle)
 router.post('/newUser', controller.createUser)
 router.put('/tagrequest/:id', controller.tagRequest)
 router.post('/newCar', controller.createCar)
+// router.get('/ticketmaster/events/name', ticketmaster.getTicketmasterEvent)
 // router.post('/login', controller.authenticate)
+router.get('/ticketmaster/events/:name', (req, res, next) => {
+    axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=[${req.params.name}]`, {
+        params: {
+            "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh"
+        }
+    })
+        .then(response => {
+            const { events } = response.data._embedded
+            res.json(events)
+        })
+})
+
+
 
 
 router.post('/login', (req, res, next) => {
@@ -47,8 +63,6 @@ router.get('/loggedin', (req, res, next) => {
     } else {
         res.json(null)
     }
-
-
 })
 
 router.delete('/logout', (req, res, next) => {

@@ -6,6 +6,12 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+
+    hometown: {
+        type: String,
+        require: true
+    },
+
     password: {
         type: String,
         required: true
@@ -25,7 +31,7 @@ const userSchema = new Schema({
     trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
     tagRequested: [{ type: Schema.Types.ObjectId, ref: "Event" }]
 
-},{
+}, {
     timestamps: true
 })
 

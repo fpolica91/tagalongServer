@@ -8,7 +8,7 @@ const passport = require('passport')
 module.exports = {
     createUser(req, res) {
         console.log(req.body)
-        const { username, password, email } = req.body
+        const { username, password, email, hometown } = req.body
         console.log('this is req.body', req.body)
         if (username === "" || password === "" || email === "") {
             res.json({ message: "Please fill all the required fields" })
@@ -24,11 +24,10 @@ module.exports = {
                         const salt = bcrypt.genSaltSync(bcryptsalt)
                         const encryptedPassword = bcrypt.hashSync(password, salt)
 
-                        User.create({ username, password: encryptedPassword, email })
+                        User.create({ username, password: encryptedPassword, email, hometown })
                             .then(user => {
-                                console.log("NEW USER!")
                                 res.json(user)
-                                req.io.emit('reload')
+                                req.io.sockets.emit('reload')
                             }).catch(err => console.log("An error just happened while signing up ", err))
                     }
                 }).catch(err => console.log(err))
@@ -36,13 +35,13 @@ module.exports = {
     },
 
 
-    tagRequest(req, res){
+    tagRequest(req, res) {
         console.log(req.params.id)
         console.log("HELL YEAH")
 
     },
 
-    createCar(req, res){
+    createCar(req, res) {
         console.log(req.body)
         const { userId, model, seats } = req.body
         Vehicle.create({
@@ -51,14 +50,14 @@ module.exports = {
             seats
         }).then(newCar => {
             console.log(newCar._id)
-            User.findByIdAndUpdate(userId, 
-                { $push: {vehicles: newCar._id}},
-                { new : true, upsert: true},
-                ).then(userUpdated => {
-                    console.log("SUCCESS!")
-                    console.log(userUpdated)
-                })
-       
+            User.findByIdAndUpdate(userId,
+                { $push: { vehicles: newCar._id } },
+                { new: true, upsert: true },
+            ).then(userUpdated => {
+                console.log("SUCCESS!")
+                console.log(userUpdated)
+            })
+
         }).catch(err => console.error(err))
     }
 }
