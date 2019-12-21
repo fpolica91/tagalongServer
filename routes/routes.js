@@ -21,8 +21,19 @@ router.get('/ticketmaster/events/:name', (req, res, next) => {
     })
         .then(response => {
             const { events } = response.data._embedded
-            res.json(events)
-        })
+            console.log(events[0])
+            let newMap = events.map(eachElement => {
+                return {
+                    name: eachElement.name, 
+                    url: eachElement.url,
+                    date: eachElement.dates.start.localDate,
+                    status: eachElement.dates.status,
+                    promoter: eachElement.promoter ? eachElement.promoter.name : undefined,
+                    description: eachElement.promoter ? eachElement.promoter.description : undefined,
+                }
+            })
+            res.json(newMap)
+        }).catch(err => console.error(err))
 })
 
 
