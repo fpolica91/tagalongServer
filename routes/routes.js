@@ -14,26 +14,32 @@ router.post('/newCar', controller.createCar)
 // router.get('/ticketmaster/events/name', ticketmaster.getTicketmasterEvent)
 // router.post('/login', controller.authenticate)
 router.get('/ticketmaster/events/:name', (req, res, next) => {
-    axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=[${req.params.name}]`, {
+    axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=${req.params.name}`, {
         params: {
             "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh"
         }
     })
         .then(response => {
-            const { events } = response.data._embedded
-            console.log(events[0])
-            let newMap = events.map(eachElement => {
-                return {
-                    name: eachElement.name, 
-                    url: eachElement.url,
-                    date: eachElement.dates.start.localDate,
-                    status: eachElement.dates.status,
-                    promoter: eachElement.promoter ? eachElement.promoter.name : undefined,
-                    description: eachElement.promoter ? eachElement.promoter.description : undefined,
-                }
-            })
-            res.json(newMap)
-        }).catch(err => console.error(err))
+            if (response.data) {
+                const { events } = response.data._embedded
+                console.log(events, "these are the events")
+                let newMap = events.map(eachElement => {
+                    console.log(eachElement.id)
+                    return {
+                        id: eachElement._id,
+                        name: eachElement.name,
+                        url: eachElement.url,
+                        date: eachElement.dates.start.localDate,
+                        status: eachElement.dates.status,
+                        promoter: eachElement.promoter ? eachElement.promoter.name : undefined,
+                        description: eachElement.promoter ? eachElement.promoter.description : undefined,
+                    }
+
+                })
+                res.json(newMap)
+            }
+
+        }).catch(err => res.json(err))
 })
 
 
