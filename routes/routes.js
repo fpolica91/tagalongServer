@@ -11,36 +11,35 @@ router.put('/user/:id', vehicleController.addVehicle)
 router.post('/newUser', controller.createUser)
 router.put('/tagrequest/:id', controller.tagRequest)
 router.post('/newCar', controller.createCar)
-// router.get('/ticketmaster/events/name', ticketmaster.getTicketmasterEvent)
+router.get('/ticketmaster/events/:name', ticketmaster.getTicketmasterEvent)
 // router.post('/login', controller.authenticate)
-router.get('/ticketmaster/events/:name', (req, res, next) => {
-    axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=${req.params.name}`, {
-        params: {
-            "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh"
-        }
-    })
-        .then(response => {
-            if (response.data) {
-                const { events } = response.data._embedded
-                console.log(events, "these are the events")
-                let newMap = events.map(eachElement => {
-                    console.log(eachElement.id)
-                    return {
-                        id: eachElement._id,
-                        name: eachElement.name,
-                        url: eachElement.url,
-                        date: eachElement.dates.start.localDate,
-                        status: eachElement.dates.status,
-                        promoter: eachElement.promoter ? eachElement.promoter.name : undefined,
-                        description: eachElement.promoter ? eachElement.promoter.description : undefined,
-                    }
+// router.get('/ticketmaster/events/:name', (req, res, _) => {
+//     axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=${req.params.name}`, {
+//         params: {
+//             "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh"
+//         }
+//     })
+//         .then(response => {
+//             if (response.data) {
+//                 const { events } = response.data._embedded
+//                 console.log(events, "these are the events")
+//                 let newMap = events.map(eachElement => {
+//                     return {
+//                         id: eachElement._id,
+//                         name: eachElement.name,
+//                         url: eachElement.url,
+//                         date: eachElement.dates.start.localDate,
+//                         status: eachElement.dates.status,
+//                         promoter: eachElement.promoter ? eachElement.promoter.name : undefined,
+//                         description: eachElement.promoter ? eachElement.promoter.description : undefined,
+//                     }
 
-                })
-                res.json(newMap)
-            }
+//                 })
+//                 res.json(newMap)
+//             }
 
-        }).catch(err => res.json(err))
-})
+//         }).catch(err => res.json(err))
+// })
 
 
 
