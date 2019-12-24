@@ -18,6 +18,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const compression = require('compression')
 
 const User = require('./Models/User.model')
 const Event = require('./Models/Events.model')
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json())
+app.use(compression())
 
 
 app.use(session({
@@ -94,7 +96,7 @@ io.on('connection', socket => {
 
         Event.find().populate('host', 'username email').populate('vehicles')
             // THIS POPULATES THE HOST AND THE VEHICLE
-         
+
             .then(events => {
                 console.log('this emit gets all the events')
                 socket.emit('events', events)
@@ -102,7 +104,8 @@ io.on('connection', socket => {
 
 
         app.post('/event', (req, res, _) => {
-            User.findById(req.body.host)
+            // User.findById(req.body.host)
+            User.findById(req.user._id)
                 .then(user => {
                     Event.create({
                         host: user._id,
@@ -144,8 +147,10 @@ if (!sticky.listen(server, port)) {
             cluster.fork()
         }
         console.log('Master server started on port ' + port);
-
     }
+    cluster.on('exit', (worker) => {
+        cluster.fork()
+    })
 }
 else {
     console.log('- Child server started on port ' + port + ' case worker id=' + cluster.worker.id);
