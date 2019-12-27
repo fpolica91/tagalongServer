@@ -12,6 +12,7 @@ router.post('/newUser', controller.createUser)
 router.put('/tagrequest/:id', controller.tagRequest)
 router.post('/newCar', controller.createCar)
 router.get('/ticketmaster/events/:name', ticketmaster.getTicketmasterEvent)
+router.get('/ticketmaster/filtered/:keyword?', ticketmaster.getQueryEvents)
 // router.post('/login', controller.authenticate)
 // router.get('/ticketmaster/events/:name', (req, res, _) => {
 //     axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=${req.params.name}`, {

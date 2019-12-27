@@ -3,7 +3,6 @@ const Schema = mongoose.Schema
 
 const eventSchema = new Schema({
     host: { type: Schema.Types.ObjectId, ref: "User" },
-
     date: {
         type: Date,
         // required: true
@@ -18,6 +17,11 @@ const eventSchema = new Schema({
     public: {
         type: Boolean,
     },
+
+    venue: String,
+    address: String,
+    location: String,
+    url: String,
     vehicles: [{
         car: { type: Schema.Types.ObjectId, ref: "Vehicle" },
         seats: Number

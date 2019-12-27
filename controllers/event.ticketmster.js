@@ -27,6 +27,8 @@ module.exports = {
             if (totalElements) {
                 const { events } = response.data._embedded
                 const _filteredEventProperties = events.map(event => {
+                    console.log(event._embedded.venues)
+                    console.log(event.images, "this is the event before filtering")
                     return {
                         id: event._id,
                         name: event.name,
@@ -35,12 +37,47 @@ module.exports = {
                         status: event.dates.status,
                         promoter: event.promoter ? event.promoter.name : undefined,
                         description: event.promoter ? event.promoter.description : undefined,
-                        venues: event._embedded.venues[0]
+                        venues: event._embedded.venues[0],
+
+                        images: event.images
                     }
                 })
                 res.json(_filteredEventProperties)
             }
 
         }).catch(err => console.log(err))
+    },
+    getQueryEvents(req, res) {
+        console.log(req.query.city)
+        const { keyword, city } = req.query
+        const endpoint = city ? `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${keyword}&city=${city}`
+            : `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${keyword}`
+        axios.get(endpoint, {
+            params: {
+                "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh",
+            }
+        })
+            .then(response => {
+                const { totalElements } = response.data.page
+                console.log(totalElements)
+                if (!totalElements) res.json({ success: false, message: "unable to find any events" })
+                if (totalElements) {
+                    const { events } = response.data._embedded
+                    const _filteredEventProperties = events.map(event => {
+                        return {
+                            id: event._id,
+                            name: event.name,
+                            url: event.url,
+                            date: event.dates.start.localDate,
+                            status: event.dates.status,
+                            promoter: event.promoter ? event.promoter.name : undefined,
+                            description: event.promoter ? event.promoter.description : undefined,
+                            venues: event._embedded.venues[0],
+                            images: event.images
+                        }
+                    })
+                    res.json(_filteredEventProperties)
+                }
+            })
     }
 }

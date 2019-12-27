@@ -112,7 +112,12 @@ io.on('connection', socket => {
                         date: req.body.date,
                         name: req.body.name,
                         category: req.body.category,
-                        public: req.body.public
+                        public: req.body.public,
+                        venue: req.body.venue,
+                        url: req.body.url,
+                        address: req.body.address,
+                        location: req.body.location
+
                     }).then(event => {
                         user.events.push(event._id)
                         user.save()
