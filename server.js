@@ -40,6 +40,7 @@ app.use(session({
     })
 }));
 
+// MOBILE  VERSION NOW USES EXPO
 
 
 // // ====================PASSPORT MIDDLEWARE==========================
