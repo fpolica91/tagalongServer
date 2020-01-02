@@ -27,8 +27,6 @@ module.exports = {
             if (totalElements) {
                 const { events } = response.data._embedded
                 const _filteredEventProperties = events.map(event => {
-                    console.log(event._embedded.venues)
-                    console.log(event.images, "this is the event before filtering")
                     return {
                         id: event._id,
                         name: event.name,

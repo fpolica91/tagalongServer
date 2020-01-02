@@ -14,6 +14,7 @@ passport.deserializeUser((id, done) => {
         .then(user => {
             done(null, user)
         })
+        .catch(error => res.json(error))
     // User.findOne({ _id: id }, (err, user) => {
     //     done(err, user)
     // })

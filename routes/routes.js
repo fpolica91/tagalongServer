@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router()
 const controller = require('../controllers/user.contorller')
 const vehicleController = require('../controllers/vehicleController')
+const eventController = require('../controllers/event.controller')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 const ticketmaster = require('../controllers/event.ticketmster')
 const axios = require('axios')
+
+
 
 router.put('/user/:id', vehicleController.addVehicle)
 router.post('/newUser', controller.createUser)
@@ -13,6 +16,7 @@ router.put('/tagrequest/:id', controller.tagRequest)
 router.post('/newCar', controller.createCar)
 router.get('/ticketmaster/events/:name', ticketmaster.getTicketmasterEvent)
 router.get('/ticketmaster/filtered/:keyword?', ticketmaster.getQueryEvents)
+router.get('/tagEvents/:keyword?', eventController.searchBarQuery)
 // router.post('/login', controller.authenticate)
 // router.get('/ticketmaster/events/:name', (req, res, _) => {
 //     axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=${req.params.name}`, {
@@ -46,19 +50,13 @@ router.get('/ticketmaster/filtered/:keyword?', ticketmaster.getQueryEvents)
 
 
 router.post('/login', (req, res, next) => {
-    console.log(req.body, "user trying to log in")
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             res.json({ message: "unexpected error ", err })
-
         } if (!user) {
             res.status(401).json(info)
-
         }
-
         req.login(user, (err) => {
-            console.log("LOGIN CALLED")
-            console.log('found the user', user)
             user.password = undefined
             if (err) {
                 res.json({ message: "error authenticating" })
