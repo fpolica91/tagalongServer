@@ -22,3 +22,8 @@ old way of creating event
         //             })
         //         })
         // })
+
+        before  using mongodb attending.0.guest
+                // newEvent.requested.push({ guest })
+        // newEvent.attending.push({ guest })
+        // await newEvent.save()

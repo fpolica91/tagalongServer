@@ -54,9 +54,6 @@ module.exports = {
             "attending.0.guest": guest
         })
 
-        // newEvent.requested.push({ guest })
-        // newEvent.attending.push({ guest })
-        // await newEvent.save()
 
         user.events.push(newEvent._id)
         user.save()
