@@ -10,7 +10,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     console.log("THIS IS DESERIALIZER")
-    User.findById(id).populate('vehicles events')
+    User.findById(id).populate('events')
         .then(user => {
             done(null, user)
         })

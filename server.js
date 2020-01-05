@@ -1,4 +1,4 @@
-require('dotenv').config()
+
 
 var sticky = require('sticky-session'),
     http = require('http'),
