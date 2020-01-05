@@ -30,23 +30,38 @@ module.exports = {
     },
     async request(req, res) {
         const { id } = req.params
-        const { user } = req.body
+        const { guest } = req.body
+        const user = await User.findById(req.user._id)
         const event = await Event.findById(id)
-        if (event.host.equals(user)) {
+        if (event.host.equals(user._id)) {
             res.json({ message: "you are the host" })
         } else {
-            if (event.attending.some(attend => attend.equals(user))) {
-                let index = event.attending.indexOf(user)
-                event.attending.splice(index, 1)
-                event.save()
+            if (event.requested.some(attend => attend.user.equals(user._id))) {
+                res.json({ success: false, message: "you are already requested this event" })
             } else {
-                await event.attending.push(user)
+                await event.requested.push({ user: user._id, guest })
                 await event.save()
                 res.json(event)
             }
         }
+    },
+    async createEvt(req, res) {
+        const { date, name, category, public, venue, url, address, location, guest } = req.body.event
+        const user = await User.findById(req.user._id)
+        const newEvent = await Event.create({
+            host: user._id, date, name, category, public, venue, url, address, location,
+            "requested.0.guest": guest,
+            "attending.0.guest": guest
+        })
+
+        // newEvent.requested.push({ guest })
+        // newEvent.attending.push({ guest })
+        // await newEvent.save()
+
+        user.events.push(newEvent._id)
+        user.save()
+        res.json(newEvent)
+        req.io.emit('reload')
+
     }
-
-
-
 }

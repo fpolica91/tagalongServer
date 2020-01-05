@@ -62,12 +62,7 @@ require('./config/passport.setup.js')(app)
 // app.use(passport.session());
 // ====================PASSPORT MIDDLEWARE==========================
 
-app.use(cors({
-    credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002"]
-}))
-// app.use(cors())
-app.use(routes)
+
 
 const port = 5000
 
@@ -83,6 +78,12 @@ const port = 5000
 
 
 io = socketIO(server);
+
+app.use((req, res, next) => {
+    req.io = io;
+    return next()
+})
+
 io.on('connection', socket => {
 
     console.log('new conection established')
@@ -104,42 +105,18 @@ io.on('connection', socket => {
             })
 
 
-        app.post('/event', (req, res, _) => {
-            // User.findById(req.body.host)
-            User.findById(req.user._id)
-                .then(user => {
-                    Event.create({
-                        host: user._id,
-                        date: req.body.date,
-                        name: req.body.name,
-                        category: req.body.category,
-                        public: req.body.public,
-                        venue: req.body.venue,
-                        url: req.body.url,
-                        address: req.body.address,
-                        location: req.body.location
 
-                    }).then(event => {
-                        user.events.push(event._id)
-                        user.save()
-                        res.json(event)
-                        io.sockets.emit('reload')
-                    })
-                })
-            //     console.log(req.body)
-            //     Event.create(req.body)
-            //         .then(event => {
-            //             res.json(event)
-            //             io.sockets.emit('reload')
-            //         })
-            //         .catch(err => res.json(err))
-        })
         // END OF INIT_COMMUNICATION
     })
     socket.on('disconnect', () => {
         console.log(' a user disconnected')
     })
 })
+
+
+
+
+
 
 
 
@@ -163,22 +140,12 @@ else {
 }
 
 
-app.use((req, res, next) => {
-    req.io = io;
-    return next()
-})
 
-
-
-//OLD WAY POPULATING MONGOOSE
-// .populate({
-     // path: "host",
-     // model: "User",
-     // populate: {
-     //     path: 'vehicles',
-     //     model: "Vehicle"
-     // }
-// })
-
+app.use(cors({
+    credentials: true,
+    origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002"]
+}))
+// app.use(cors())
+app.use(routes)
 
 

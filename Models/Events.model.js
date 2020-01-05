@@ -26,10 +26,13 @@ const eventSchema = new Schema({
         car: { type: Schema.Types.ObjectId, ref: "Vehicle" },
         seats: Number
     }],
-    attending: [{
-        user: { type: Schema.Types.ObjectId, ref: "User" },
-        guest: Number
-    }],
+    attending:
+        [
+            {
+                user: { type: Schema.Types.ObjectId, ref: "User" },
+                guest: Number
+            }
+        ],
     requested: [{
         user: { type: Schema.Types.ObjectId, ref: "User" },
         guest: Number

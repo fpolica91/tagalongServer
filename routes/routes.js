@@ -12,6 +12,7 @@ const axios = require('axios')
 
 router.put('/user/:id', vehicleController.addVehicle)
 router.post('/newUser', controller.createUser)
+router.post('/event', eventController.createEvt)
 router.put('/tagrequest/:id', controller.tagRequest)
 router.post('/newCar', controller.createCar)
 router.get('/ticketmaster/events/:name', ticketmaster.getTicketmasterEvent)

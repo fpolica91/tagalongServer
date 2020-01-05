@@ -27,8 +27,9 @@ module.exports = {
             if (totalElements) {
                 const { events } = response.data._embedded
                 const _filteredEventProperties = events.map(event => {
+
                     return {
-                        id: event._id,
+                        id: event.id,
                         name: event.name,
                         url: event.url,
                         date: event.dates.start.localDate,
@@ -46,7 +47,6 @@ module.exports = {
         }).catch(err => console.log(err))
     },
     getQueryEvents(req, res) {
-        console.log(req.query.city)
         const { keyword, city } = req.query
         const endpoint = city ? `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${keyword}&city=${city}`
             : `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${keyword}`
@@ -62,8 +62,9 @@ module.exports = {
                 if (totalElements) {
                     const { events } = response.data._embedded
                     const _filteredEventProperties = events.map(event => {
+                        console.log(event.id)
                         return {
-                            id: event._id,
+                            id: event.id,
                             name: event.name,
                             url: event.url,
                             date: event.dates.start.localDate,
