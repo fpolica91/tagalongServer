@@ -29,20 +29,27 @@ module.exports = {
         return res.json(event)
     },
     async request(req, res) {
-        const { id } = req.params
         const { guest } = req.body
+        const { id } = req.params
         const user = await User.findById(req.user._id)
-        const event = await Event.findById(id)
-        if (event.host.equals(user._id)) {
-            res.json({ message: "you are the host" })
-        } else {
-            if (event.requested.some(attend => attend.user.equals(user._id))) {
-                res.json({ success: false, message: "you are already requested this event" })
+        try {
+            const event = await Event.findById(id)
+            if (event.host.equals(user._id)) {
+                res.json({ success: false, message: "You are the event creator" })
             } else {
-                await event.requested.push({ user: user._id, guest })
-                await event.save()
-                res.json(event)
+                if (event.requested.some(item => item.user.equals(user._id))) {
+                    res.json({ message: "you are already attending this event" })
+                } else {
+                    const updated = await event.update({
+                        $push: {
+                            requested: { user, guest }
+                        }
+                    })
+                    res.json(updated)
+                }
             }
+        } catch (err) {
+            throw new Error(err)
         }
     },
     async createEvt(req, res) {
@@ -50,10 +57,7 @@ module.exports = {
         const user = await User.findById(req.user._id)
         const newEvent = await Event.create({
             host: user._id, date, name, category, public, venue, url, address, location,
-            "requested.0.guest": guest,
-            "attending.0.guest": guest
         })
-
 
         user.events.push(newEvent._id)
         user.save()

@@ -27,3 +27,43 @@ old way of creating event
                 // newEvent.requested.push({ guest })
         // newEvent.attending.push({ guest })
         // await newEvent.save()
+
+
+ideas  
+
+
+        // .then(event => {
+        //     const number = Number(event.requested[0].guest) - Number(guest)
+        //     event.update({
+        //         $set: { "requested.0.guest": number },
+        //         $set: { "requested.0.user": user }
+        //     })
+        //     event.save()
+        //     res.json(event)
+        // })
+
+
+
+
+            // Event.findByIdAndUpdate(id, {
+        //     $inc: { "requested.0.guest": -guest },
+        //     $set: { "requested.0.user": user }
+        // }).then(event => res.json(event))
+
+
+
+
+        // .then(event => res.json(event))
+        // if (event.host.equals(user._id)) {
+        //     res.json({ message: "you are the host" })
+        // } else {
+        //     // if (event.requested.some(attend => attend.user.equals(user))) {
+        //     // res.json({ success: false, message: "you are already requested this event" })
+        //     // } else {
+        //     await event.update({
+        //         "requested.0.guest ": guest
+        //     })
+        //     await event.save()
+        //     res.json(event)
+        // }
+        // }

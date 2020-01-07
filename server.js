@@ -143,7 +143,9 @@ else {
 
 app.use(cors({
     credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002"]
+    origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002", "exp://10.0.0.87:19000", "exp://127.0.0.1:19000",
+        "exp://qc-kxf.anonymous.tagalongmobile.exp.direct:80", "10.0.0.87:19001"
+    ]
 }))
 // app.use(cors())
 app.use(routes)

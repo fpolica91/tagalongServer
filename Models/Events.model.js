@@ -33,10 +33,15 @@ const eventSchema = new Schema({
                 guest: Number
             }
         ],
-    requested: [{
-        user: { type: Schema.Types.ObjectId, ref: "User" },
-        guest: Number
-    }],
+    requested: [
+        {
+            guest: {
+                type: Number,
+                default: 0
+            },
+            user: { type: Schema.Types.ObjectId, ref: "User" }
+        }
+    ],
 },
     {
         timestamps: true
