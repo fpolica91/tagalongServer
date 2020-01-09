@@ -21,6 +21,7 @@ module.exports = {
         }
     },
 
+
     async  searchByUser(req, res) {
         const { user } = req.params
         const host = await User.find({ username: { "$regex": user, "$options": "i" } }).select('_id')
@@ -46,11 +47,30 @@ module.exports = {
                         }
                     })
                     res.json(updated)
+                    req.io.emit('reload')
                 }
             }
         } catch (err) {
             throw new Error(err)
         }
+    },
+
+    async acceptRequest(req, res) {
+        const { id } = req.params
+        const { request } = req.body
+        const event = await Event.findById(id)
+        const userToUpdate = event.requested.find(item => item.user.equals(request))
+        const { user, guest } = userToUpdate
+        const updatedEvent = await event.update({
+            $push: {
+                attending: { user, guest }
+            },
+            $pull: {
+                requested: { user, guest }
+            }
+        })
+
+        res.json(updatedEvent)
     },
     async createEvt(req, res) {
         const { date, name, category, public, venue, url, address, location, guest } = req.body.event
@@ -63,6 +83,5 @@ module.exports = {
         user.save()
         res.json(newEvent)
         req.io.emit('reload')
-
     }
 }

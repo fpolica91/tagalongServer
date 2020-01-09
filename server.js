@@ -81,28 +81,30 @@ io = socketIO(server);
 
 app.use((req, res, next) => {
     req.io = io;
+    req.connectedUsers = connectedUsers
     return next()
 })
 
-io.on('connection', socket => {
+const connectedUsers = {}
 
-    console.log('new conection established')
+
+io.on('connection', socket => {
+    const { user } = socket.handshake.query
+    connectedUsers[user] = socket.id
+
+
     socket.on('init_communication', () => {
         console.log('this is the initial communication')
-        User.find({}).select('username')
-            .then(users => {
-                console.log('this emit gets the users')
-                io.sockets.emit('users', users)
-            })
-            .catch(err => res.json(err))
+        // User.find({}).select('username')
+        //     .then(users => {
+        //         io.sockets.emit('users', users)
+        //     })
+        //     .catch(err => res.json(err))
 
-        Event.find().populate('host', 'username email').populate('vehicles')
-            // THIS POPULATES THE HOST AND THE VEHICLE
-
-            .then(events => {
-                console.log('this emit gets all the events')
-                socket.emit('events', events)
-            })
+        Event.find().populate('host', 'username email')
+            .populate('vehicles')
+            .then(events => socket.emit('events', events))
+            .catch(err => new Error(err))
 
 
 
@@ -143,8 +145,7 @@ else {
 
 app.use(cors({
     credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002", "exp://10.0.0.87:19000", "exp://127.0.0.1:19000",
-        "exp://qc-kxf.anonymous.tagalongmobile.exp.direct:80", "10.0.0.87:19001"
+    origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002",
     ]
 }))
 // app.use(cors())

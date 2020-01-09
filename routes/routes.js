@@ -20,6 +20,7 @@ router.get('/ticketmaster/filtered/:keyword?', ticketmaster.getQueryEvents)
 router.get('/tagEvents/:keyword?', eventController.searchBarQuery)
 router.get('/tagEventsBy/:user?', eventController.searchByUser)
 router.put('/tagAlong/:id', eventController.request)
+router.put('/acceptTag/:id', eventController.acceptRequest)
 
 
 
@@ -46,7 +47,7 @@ router.post('/login', (req, res, next) => {
 
 
 router.get('/loggedin', (req, res, next) => {
-    console.log(req.user, "is the user")
+    console.log(req.user, "_____is the user")
     if (req.user) {
         req.user.password = undefined
         res.json(req.user)

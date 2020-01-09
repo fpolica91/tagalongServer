@@ -22,12 +22,12 @@ module.exports = {
                 "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh",
             }
         }).then((response) => {
+
             const { totalElements } = response.data.page
             if (!totalElements) res.json({ success: false, message: "There are no events upcoming events in your hometown" })
             if (totalElements) {
                 const { events } = response.data._embedded
                 const _filteredEventProperties = events.map(event => {
-
                     return {
                         id: event.id,
                         name: event.name,
