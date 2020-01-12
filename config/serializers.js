@@ -3,21 +3,29 @@ const passport = require('passport');
 const User = require('../Models/User.model')
 
 passport.serializeUser((user, done) => {
+    console.log(user, "THE USER")
     // done(null, { _id: user._id })
     done(null, user)
 });
 
 
 passport.deserializeUser((id, done) => {
-    console.log("THIS IS DESERIALIZER")
-    User.findById(id).populate('events')
-        .then(user => {
-            done(null, user)
+    User.findById(id)
+        .then((user, error) => {
+            if (error) {
+                res.json({ success: false, message: "unexpected error" })
+            } else {
+                done(null, user)
+            }
         })
-        .catch(error => res.json(error))
-    // User.findOne({ _id: id }, (err, user) => {
-    //     done(err, user)
-    // })
+
+    // User.findById(id)
+    //     .then(user => {
+
+    //         done(null, user)
+    //     })
+    //     .catch(error => res.json(error))
+
 })
 
 // PASSPORT IS NOT PROMISED BASED!

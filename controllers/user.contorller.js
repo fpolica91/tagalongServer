@@ -8,27 +8,25 @@ const passport = require('passport')
 module.exports = {
     async createUser(req, res) {
         const { username, password, email, hometown } = req.body
-        if (username === "" || password === "" || email === "") {
-            res.json({ message: "Please fill all the required fields" })
+        if (!username || !passport || !email) {
+            res.json({ success: false, message: "Filled all required fields" })
         } else {
-            const userExists = await User.find({ username: username })
-            if (userExists.length) {
-                return res.json({ success: false, message: "user already exist" })
-            }
-
-            const bcryptsalt = 10;
-            const salt = bcrypt.genSaltSync(bcryptsalt)
-            const encryptedPassword = bcrypt.hashSync(password, salt)
-
-            const user = await User.create({
-                username,
-                password: encryptedPassword,
-                email,
-                hometown
-            })
-
-            await user.save()
-            return res.json(user)
+            await User.findOne({ $or: [{ username: username }, { email: email }] })
+                .then(user => {
+                    if (user) {
+                        res.json({ success: false, message: "username or email already taken" })
+                    } else {
+                        const bcryptsalt = 10;
+                        const salt = bcrypt.genSaltSync(bcryptsalt)
+                        const encryptedPassword = bcrypt.hashSync(password, salt)
+                        User.create({ username, email, password: encryptedPassword, hometown })
+                            .then(user => {
+                                res.json(user)
+                            })
+                            .catch(err => res.json(err))
+                    }
+                })
+                .catch(err => res.json(err))
         }
     },
 

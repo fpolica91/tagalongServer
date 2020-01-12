@@ -6,7 +6,8 @@ const eventController = require('../controllers/event.controller')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 const ticketmaster = require('../controllers/event.ticketmster')
-const axios = require('axios')
+const mergedApi = require('../controllers/event.api')
+
 
 
 
@@ -21,6 +22,7 @@ router.get('/tagEvents/:keyword?', eventController.searchBarQuery)
 router.get('/tagEventsBy/:user?', eventController.searchByUser)
 router.put('/tagAlong/:id', eventController.request)
 router.put('/acceptTag/:id', eventController.acceptRequest)
+router.get('/mergedEvents', mergedApi.eventHandler)
 
 
 
@@ -47,7 +49,6 @@ router.post('/login', (req, res, next) => {
 
 
 router.get('/loggedin', (req, res, next) => {
-    console.log(req.user, "_____is the user")
     if (req.user) {
         req.user.password = undefined
         res.json(req.user)
@@ -58,6 +59,7 @@ router.get('/loggedin', (req, res, next) => {
 
 router.delete('/logout', (req, res, next) => {
     req.logout();
+    req.session.destroy()
     res.json({ user: null })
 })
 

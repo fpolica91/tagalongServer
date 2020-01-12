@@ -146,6 +146,8 @@ else {
 app.use(cors({
     credentials: true,
     origin: ["http://localhost:3000", "http://localhost:8081", "http://localhost:19002",
+        "exp://10.101.1.92:19000", "10.101.1.92:19000"
+
     ]
 }))
 // app.use(cors())
