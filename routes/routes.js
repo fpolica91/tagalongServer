@@ -22,7 +22,7 @@ router.get('/tagEvents/:keyword?', eventController.searchBarQuery)
 router.get('/tagEventsBy/:user?', eventController.searchByUser)
 router.put('/tagAlong/:id', eventController.request)
 router.put('/acceptTag/:id', eventController.acceptRequest)
-router.get('/mergedEvents', mergedApi.eventHandler)
+router.get('/mergedEvents?', mergedApi.eventHandler)
 
 
 

@@ -2,12 +2,15 @@ const axios = require('axios')
 
 module.exports = {
     async eventHandler(req, res) {
-        const seatGeek = async () => await axios.get("https://api.seatgeek.com/2/events?venue.city=west palm beach&client_id=MjAyODAzODV8MTU3ODc3NDkyNi41")
+
+        const { name } = req.query
+        const city = name.slice(0, name.indexOf(","))
+        const seatGeek = async () => await axios.get(`https://api.seatgeek.com/2/events?venue.city=${city}&client_id=MjAyODAzODV8MTU3ODc3NDkyNi41`)
             .catch(err => new Error(err))
-        const ticketMaster = async () => await axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?&city=west palm beach`, { params: { "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh", } })
+        const ticketMaster = async () => await axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?&city=${city}`, { params: { "apikey": "IAF49wzCrcjsCkSgLMKAVWJ5flePU6Vh", } })
             .catch(err => new Error(err))
 
-        const stubHub = async () => await axios.get('https://api.stubhub.com/sellers/search/events/v3?city=west palm beach', {
+        const stubHub = async () => await axios.get(`https://api.stubhub.com/sellers/search/events/v3?city=${city}`, {
             headers: { "Authorization": "Bearer " + "LAMsjgt0wHACRuEdYHayTNZzsSM6" }
         })
 
@@ -59,7 +62,7 @@ module.exports = {
                     }
                 })
 
-                const merged = [ticketmaster, geeks, stubs]
+                const merged = [...ticketmaster, ...stubs, ...geeks]
                 res.json(merged)
 
             }))
